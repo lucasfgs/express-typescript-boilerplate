@@ -1,12 +1,12 @@
 import dotenv from "dotenv";
+dotenv.config();
+
 import express from "express";
 import morgan from "morgan";
 import helmet from "helmet";
 import swaggerUi from "swagger-ui-express";
 import swaggerDoc from "swagger-jsdoc";
 import { options } from "./config/swagger";
-
-dotenv.config();
 
 import routes from "./routes";
 
