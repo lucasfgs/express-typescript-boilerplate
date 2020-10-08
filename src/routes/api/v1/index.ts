@@ -1,19 +1,9 @@
-import { Router, Request, Response, NextFunction } from "express";
+import { Router } from "express";
+
+import users from "./users";
 
 const routes = Router();
 
-/**
- * @swagger
- * /users:
- *  get:
- *    description: Return all users
- *    responses:
- *      '200':
- *        description: A successful response
- *
- */
-routes.get("/", (req: Request, res: Response, next: NextFunction) => {
-  res.send("Hello World!");
-});
+routes.use("/users", users);
 
 export default routes;
