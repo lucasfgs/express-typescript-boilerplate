@@ -11,7 +11,7 @@ export const options = {
         url: "https://spdx.org/licenses/MIT.html",
       },
       contact: {
-        name: "example",
+        name: "Lucas Ferreira",
         url: "https://github.com/lucasfgs",
         email: "lucsferreira.dev@gmail.com",
       },
@@ -22,5 +22,5 @@ export const options = {
       },
     ],
   },
-  apis: ["./routes/index.ts"],
+  apis: ["src/routes/*.ts", "src/routes/api/v1/*.ts"],
 };
