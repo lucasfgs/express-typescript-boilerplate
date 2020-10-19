@@ -12,8 +12,10 @@
     "baseUrl": ".",
     "paths": {
       "*": ["node_modules/*"],
-      "config/*": ["src/Config/*"],
-      "interfaces/*": ["src/Interfaces/*"]
+      "@config/*": ["src/config/*"],
+      "@interfaces/*": ["src/interfaces/*"],
+      "@models/*": ["src/database/models/*"],
+      "@controllers/*": ["src/controllers/*"]
     }
   },
   "include": ["src/**/*"]

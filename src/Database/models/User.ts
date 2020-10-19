@@ -4,27 +4,31 @@ import {
   Model,
   DataType,
   AutoIncrement,
+  PrimaryKey,
   AllowNull,
+  Unique,
 } from "sequelize-typescript";
 
 @Table
-class Users extends Model<Users> {
-  @Column(DataType.INTEGER)
+class User extends Model<User> {
+  @PrimaryKey
   @AutoIncrement
   @AllowNull(false)
+  @Column({ type: DataType.INTEGER })
   id: number;
 
-  @Column(DataType.TEXT)
   @AllowNull(false)
+  @Column({ type: DataType.TEXT })
   name: string;
 
-  @Column(DataType.TEXT)
   @AllowNull(false)
+  @Unique
+  @Column({ type: DataType.TEXT })
   email: string;
 
-  @Column(DataType.TEXT)
   @AllowNull(false)
+  @Column({ type: DataType.TEXT })
   password: string;
 }
 
-export default Users;
+export default User;
