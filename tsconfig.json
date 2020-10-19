@@ -2,7 +2,9 @@
   "compilerOptions": {
     "module": "commonjs",
     "esModuleInterop": true,
-    "target": "es6",
+    "target": "es6", // or a more recent ecmascript version
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "noImplicitAny": true,
     "moduleResolution": "node",
     "sourceMap": true,
@@ -10,7 +12,8 @@
     "baseUrl": ".",
     "paths": {
       "*": ["node_modules/*"],
-      "config/*": ["src/config/*"]
+      "config/*": ["src/Config/*"],
+      "interfaces/*": ["src/Interfaces/*"]
     }
   },
   "include": ["src/**/*"]
