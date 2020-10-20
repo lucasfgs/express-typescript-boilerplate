@@ -2,33 +2,36 @@ import {
   Table,
   Column,
   Model,
-  DataType,
   AutoIncrement,
   PrimaryKey,
   AllowNull,
   Unique,
+  ForeignKey,
+  BelongsTo,
 } from "sequelize-typescript";
+
+import Company from "@models/Company";
 
 @Table
 class User extends Model<User> {
   @PrimaryKey
   @AutoIncrement
-  @AllowNull(false)
-  @Column({ type: DataType.INTEGER })
+  @Column
   id: number;
 
-  @AllowNull(false)
-  @Column({ type: DataType.TEXT })
+  @Column
   name: string;
 
-  @AllowNull(false)
   @Unique
-  @Column({ type: DataType.TEXT })
+  @Column
   email: string;
 
-  @AllowNull(false)
-  @Column({ type: DataType.TEXT })
+  @Column
   password: string;
+
+  @ForeignKey(() => Company)
+  @Column
+  comapnyId: number;
 }
 
 export default User;

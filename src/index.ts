@@ -19,13 +19,15 @@ app.use(express.json());
 app.use("/api", routes);
 
 (async () => {
-  await sequelize.sync();
+  await sequelize.sync({ force: true });
   // API documentation route
   if (process.env.ENV_MODE === "DEV")
     app.use("/docs", swaggerUi.serve, swaggerUi.setup(apiDocumentation));
 
-  // app.listen(port);
+  // WHEN BUILDING COMMENT THIS BLOCK
   app.listen(port, () =>
     console.log(`✔ Server listening at: ${process.env.HOST}:${port}`)
   );
+  // WHEN BUILDING UNCOMMENT THIS BLOCK
+  // app.listen(port);
 })();

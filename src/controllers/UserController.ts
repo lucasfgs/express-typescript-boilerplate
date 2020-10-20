@@ -4,7 +4,7 @@ import User from "@models/User";
 export default {
   async index(req: Request, res: Response) {
     try {
-      let users = await User.findAll();
+      const users = await User.findAll();
       res.send(users);
     } catch (error) {
       res.status(400).send("Cant get all users!");
@@ -14,7 +14,7 @@ export default {
   async show(req: Request, res: Response) {
     const { user_id } = req.params;
     try {
-      let user = await User.findByPk(user_id);
+      const user = await User.findByPk(user_id);
       user
         ? res.send(user)
         : res.status(400).send("Cant get the specific user!");
@@ -26,7 +26,7 @@ export default {
   async create(req: Request, res: Response) {
     const { name, email, password } = req.body;
     try {
-      let user = await User.create({ name, email, password });
+      const user = await User.create({ name, email, password });
       res.status(201).send(user);
     } catch (error) {
       res.send(400).send("Invalid parameters!");
@@ -37,7 +37,7 @@ export default {
     try {
       const { name, email, password } = req.body;
       const { user_id } = req.headers;
-      let user = await User.update(
+      const user = await User.update(
         { name, email, password },
         { where: { id: user_id } }
       );
@@ -52,7 +52,7 @@ export default {
   async destroy(req: Request, res: Response) {
     try {
       const { user_id } = req.headers;
-      let user = User.destroy({ where: { id: user_id } });
+      const user = User.destroy({ where: { id: user_id } });
       user
         ? res.status(200).send("User deleted!")
         : res.status(400).send("Error trying to deleted user!");
