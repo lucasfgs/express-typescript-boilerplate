@@ -35,12 +35,29 @@ export default {
 
   async update(req: Request, res: Response) {
     try {
-      const {name, email, password } = req.body;
-      const {user_id} = req.headers;
-      let user = await User.upsert({ user_id, name, email, password });
-      user ? res.status(200).send(user) : res.status(400).send("Error trying to update user!");
+      const { name, email, password } = req.body;
+      const { user_id } = req.headers;
+      let user = await User.update(
+        { name, email, password },
+        { where: { id: user_id } }
+      );
+      user
+        ? res.status(200).send("User updated!")
+        : res.status(400).send("Error trying to update user!");
     } catch (error) {
       res.status(400).send("Error trying to update user!");
+    }
+  },
+
+  async destroy(req: Request, res: Response) {
+    try {
+      const { user_id } = req.headers;
+      let user = User.destroy({ where: { id: user_id } });
+      user
+        ? res.status(200).send("User deleted!")
+        : res.status(400).send("Error trying to deleted user!");
+    } catch (error) {
+      res.status(400).send("Error trying to deleted user!");
     }
   },
 };

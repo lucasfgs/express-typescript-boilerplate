@@ -1,4 +1,3 @@
-import { INTEGER } from "sequelize";
 import { api } from "../config/routes";
 export default {
   openapi: "3.0.1",
@@ -187,8 +186,41 @@ export default {
           required: true,
         },
         responses: {
-          201: {
+          200: {
             description: "User were updated",
+          },
+          400: {
+            description: "Invalid parameters",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Error",
+                },
+              },
+            },
+          },
+        },
+      },
+      delete: {
+        tags: ["Users"],
+        summary: "Delete a user.",
+        description: "Delete user",
+        operationId: "deleteUser",
+        parameters: [
+          {
+            name: "user_id",
+            in: "header",
+            schema: {
+              type: "number",
+              required: true,
+            },
+            required: true,
+            description: "User id",
+          },
+        ],
+        responses: {
+          200: {
+            description: "User were deleted",
           },
           400: {
             description: "Invalid parameters",
