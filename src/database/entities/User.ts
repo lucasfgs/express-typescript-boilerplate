@@ -1,4 +1,13 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  BaseEntity,
+  CreateDateColumn,
+  UpdateDateColumn,
+  ManyToOne,
+} from "typeorm";
+import { Company } from "./Company";
 
 @Entity()
 export class User extends BaseEntity {
@@ -14,7 +23,12 @@ export class User extends BaseEntity {
   @Column()
   password: string;
 
-  // @ForeignKey(() => Company)
-  // @Column
-  // comapnyId: number;
+  @ManyToOne(() => Company, (company) => company.employers)
+  comapny: number;
+
+  @CreateDateColumn({ type: "timestamp" })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: "timestamp" })
+  updatedAt: Date;
 }
