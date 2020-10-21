@@ -14,7 +14,7 @@
       "*": ["node_modules/*"],
       "@config/*": ["src/config/*"],
       "@interfaces/*": ["src/interfaces/*"],
-      "@models/*": ["src/database/models/*"],
+      "@models/*": ["src/database/entities/*"],
       "@controllers/*": ["src/controllers/*"]
     }
   },

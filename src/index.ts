@@ -1,11 +1,10 @@
-import dotenv from "dotenv";
-dotenv.config();
+import "dotenv/config";
+import "reflect-metadata";
 
 import express from "express";
 import morgan from "morgan";
 import helmet from "helmet";
 import swaggerUi from "swagger-ui-express";
-import { sequelize } from "./database";
 import apiDocumentation from "./docs/api";
 
 import routes from "./routes/api";
@@ -18,16 +17,11 @@ app.use(helmet());
 app.use(express.json());
 app.use("/api", routes);
 
-(async () => {
-  await sequelize.sync({ force: true });
-  // API documentation route
-  if (process.env.ENV_MODE === "DEV")
-    app.use("/docs", swaggerUi.serve, swaggerUi.setup(apiDocumentation));
+// API documentation route
+if (process.env.ENV_MODE === "DEV")
+  app.use("/docs", swaggerUi.serve, swaggerUi.setup(apiDocumentation));
 
-  // WHEN BUILDING COMMENT THIS BLOCK
-  app.listen(port, () =>
-    console.log(`✔ Server listening at: ${process.env.HOST}:${port}`)
-  );
-  // WHEN BUILDING UNCOMMENT THIS BLOCK
-  // app.listen(port);
-})();
+// WHEN BUILDING COMMENT THIS BLOCK
+app.listen(port, () =>
+  console.log(`✔ Server listening at: ${process.env.HOST}:${port}`)
+);
