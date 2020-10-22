@@ -6,6 +6,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  JoinColumn,
 } from "typeorm";
 import { Company } from "./Company";
 
@@ -24,7 +25,7 @@ export class User extends BaseEntity {
   password: string;
 
   @ManyToOne(() => Company, (company) => company.employers)
-  comapny: number;
+  company: Company;
 
   @CreateDateColumn({ type: "timestamp" })
   createdAt: Date;

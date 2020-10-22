@@ -20,7 +20,7 @@ export class Company extends BaseEntity {
   @Column()
   name: string;
 
-  @OneToMany(() => User, (user) => user.comapny)
+  @OneToMany(() => User, (user) => user.company)
   employers: User[];
 
   @CreateDateColumn({ type: "timestamp" })

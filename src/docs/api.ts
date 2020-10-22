@@ -175,7 +175,7 @@ export default {
               required: true,
             },
             required: true,
-            description: "Company id",
+            description: "User id",
           },
         ],
         requestBody: {
@@ -454,6 +454,10 @@ export default {
           password: {
             type: "string",
             example: "123",
+          },
+          companyId: {
+            type: "number",
+            example: 1,
           },
         },
       },

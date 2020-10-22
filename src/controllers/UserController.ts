@@ -1,12 +1,13 @@
 import { Request, Response } from "express";
 import { createConnection } from "typeorm";
 import { User } from "@models/User";
+import { Company } from "@models/Company";
 
 export default {
   async index(req: Request, res: Response) {
     const connection = await createConnection();
     try {
-      const users = await User.find();
+      const users = await User.find({ relations: ["company"] });
       res.send(users);
     } catch (error) {
       res.status(400).send("Cant get all users!");
@@ -33,12 +34,14 @@ export default {
     const connection = await createConnection();
 
     try {
-      const { name, email, password } = req.body;
-      const UserRepository = connection.getRepository(User);
-      const user = await UserRepository.create({
+      const { name, email, password, companyId } = req.body;
+
+      const company = await Company.findOneOrFail({ where: { id: companyId } });
+      const user = await User.create({
         name,
         email,
         password,
+        company,
       }).save();
       res.status(201).send(user);
     } catch (error) {
@@ -49,11 +52,16 @@ export default {
   },
   async update(req: Request, res: Response) {
     const connection = await createConnection();
-    const { name, email, password } = req.body;
+    const { name, email, password, companyId } = req.body;
     const { user_id } = req.headers;
     try {
-      await User.update(user_id, { name, email, password });
-      const user = await User.findOneOrFail(user_id as any);
+      const company = await Company.findOneOrFail({
+        where: { id: companyId },
+      });
+      await User.update(user_id, { name, email, password, company });
+      const user = await User.findOneOrFail(user_id as any, {
+        relations: ["company"],
+      });
       res.status(200).send(user);
     } catch (error) {
       res.status(400).send("Error trying to update user!");

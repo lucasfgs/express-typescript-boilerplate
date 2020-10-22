@@ -6,10 +6,11 @@ export default {
   async index(req: Request, res: Response) {
     const connection = await createConnection();
     try {
-      const companies = await Company.find();
+      const companies = await Company.find({ relations: ["employers"] });
       res.send(companies);
     } catch (error) {
-      res.status(400).send("Cant get all companies!");
+      res.status(400).send(error);
+      // res.status(400).send("Cant get all companies!");
     } finally {
       connection.close();
     }
@@ -19,7 +20,9 @@ export default {
 
     const { company_id } = req.params;
     try {
-      const company = await Company.findOneOrFail(company_id);
+      const company = await Company.findOneOrFail(company_id, {
+        relations: ["employers"],
+      });
       company
         ? res.send(company)
         : res.status(400).send("Cant get the specific company!");
@@ -49,7 +52,9 @@ export default {
     const { company_id } = req.headers;
     try {
       await Company.update(company_id, { name });
-      const company = await Company.findOneOrFail(company_id as any);
+      const company = await Company.findOneOrFail(company_id as any, {
+        relations: ["employers"],
+      });
       res.status(200).send(company);
     } catch (error) {
       res.status(400).send("Error trying to update company!");
