@@ -6,30 +6,21 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  JoinColumn,
+  OneToMany,
+  Unique,
 } from "typeorm";
-import { Company } from "./Company";
-import { Role } from "./Role";
+import { User } from "./User";
 
 @Entity()
-export class User extends BaseEntity {
+export class Role extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ unique: true, nullable: false })
   name: string;
 
-  @Column({ unique: true, nullable: false })
-  email: string;
-
-  @Column()
-  password: string;
-
-  @ManyToOne(() => Company, (company) => company.employers)
-  company: Company;
-
-  @ManyToOne(() => Role, (role) => role.users)
-  role: Role;
+  @ManyToOne(() => User, (user) => user.role)
+  users: User[];
 
   @CreateDateColumn({ type: "timestamp" })
   createdAt: Date;
