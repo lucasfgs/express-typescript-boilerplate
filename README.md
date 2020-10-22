@@ -3,11 +3,11 @@ A boilerplate with all you need to create a typescript project.
 
 ## Libs :books:
 
-**Express:** HTTP Framework
-**Morgan:** HTTP Request Logger
-**Swagger:** API Documentation
-**TypeORM:** ORM
-**PostgreSQL:** SQL Database
+**Express:** HTTP Framework  
+**Morgan:** HTTP Request Logger  
+**Swagger:** API Documentation  
+**TypeORM:** ORM  
+**PostgreSQL:** SQL Database  
 
 ## Project structure folder :file_folder:
 
