@@ -2,7 +2,7 @@ import { api } from "../config/routes";
 export default {
   openapi: "3.0.1",
   info: {
-    version: "1.3.0",
+    version: "1.0.0",
     title: "Api documentation",
     description: "Boilerplate",
     contact: {
@@ -33,6 +33,9 @@ export default {
   tags: [
     {
       name: "Users",
+    },
+    {
+      name: "Companies",
     },
   ],
   paths: {
@@ -235,6 +238,205 @@ export default {
         },
       },
     },
+    "/companies/{id}": {
+      get: {
+        tags: ["Companies"],
+        summary: "Get a specific company by id.",
+        description: "Return a company",
+        operationId: "getSpecificCompany",
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            schema: {
+              type: "integer",
+            },
+            required: true,
+          },
+        ],
+        responses: {
+          200: {
+            description: "A specific company were obtained",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Company",
+                },
+              },
+            },
+          },
+          400: {
+            description: "Company does not exist",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Error",
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    "/companies": {
+      get: {
+        tags: ["Companies"],
+        summary: "Returns a list of all companies.",
+        description: "Get all companies",
+        operationId: "getCompanies",
+        parameters: [
+          {
+            name: "page",
+            in: "query",
+            schema: {
+              type: "integer",
+              default: 1,
+            },
+            required: false,
+          },
+          {
+            name: "orderBy",
+            in: "query",
+            schema: {
+              type: "string",
+              enum: ["asc", "desc"],
+              default: "asc",
+            },
+            required: false,
+          },
+        ],
+        responses: {
+          200: {
+            description: "Companies were obtained",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Companies",
+                },
+              },
+            },
+          },
+          400: {
+            description: "Missing parameters",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Error",
+                },
+              },
+            },
+          },
+        },
+      },
+      post: {
+        tags: ["Companies"],
+        summary: "Create a new company.",
+        description: "Create companies",
+        operationId: "createCompanies",
+        parameters: [],
+        requestBody: {
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/Company",
+              },
+            },
+          },
+          required: true,
+        },
+        responses: {
+          201: {
+            description: "New company were created",
+          },
+          400: {
+            description: "Invalid parameters",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Error",
+                },
+              },
+            },
+          },
+        },
+      },
+      patch: {
+        tags: ["Companies"],
+        summary: "Update a company.",
+        description: "Update company",
+        operationId: "updateCompany",
+        parameters: [
+          {
+            name: "company_id",
+            in: "header",
+            schema: {
+              type: "number",
+              required: true,
+            },
+            required: true,
+            description: "Company id",
+          },
+        ],
+        requestBody: {
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/Company",
+              },
+            },
+          },
+          required: true,
+        },
+        responses: {
+          200: {
+            description: "Company were updated",
+          },
+          400: {
+            description: "Invalid parameters",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Error",
+                },
+              },
+            },
+          },
+        },
+      },
+      delete: {
+        tags: ["Companies"],
+        summary: "Delete a company.",
+        description: "Delete company",
+        operationId: "deleteCompany",
+        parameters: [
+          {
+            name: "company_id",
+            in: "header",
+            schema: {
+              type: "number",
+              required: true,
+            },
+            required: true,
+            description: "Company id",
+          },
+        ],
+        responses: {
+          200: {
+            description: "User were deleted",
+          },
+          400: {
+            description: "Invalid parameters",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Error",
+                },
+              },
+            },
+          },
+        },
+      },
+    },
   },
   components: {
     schemas: {
@@ -253,6 +455,10 @@ export default {
             type: "string",
             example: "123",
           },
+          companyId: {
+            type: "number",
+            example: 1,
+          },
         },
       },
       Users: {
@@ -262,6 +468,26 @@ export default {
             type: "array",
             items: {
               $ref: "#/components/schemas/User",
+            },
+          },
+        },
+      },
+      Company: {
+        type: "object",
+        properties: {
+          name: {
+            type: "string",
+            example: "Coca Cola",
+          },
+        },
+      },
+      Companies: {
+        type: "object",
+        properties: {
+          companies: {
+            type: "array",
+            items: {
+              $ref: "#/components/schemas/Company",
             },
           },
         },

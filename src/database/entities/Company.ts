@@ -1,23 +1,31 @@
-// import {
-//   Table,
-//   Column,
-//   Model,
-//   AutoIncrement,
-//   PrimaryKey,
-//   AllowNull,
-//   HasMany,
-// } from "sequelize-typescript";
-// import User from "src/database/entities/User";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  BaseEntity,
+  OneToOne,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from "typeorm";
+import { User } from "./User";
 
-// @Table
-// class Company extends Model<Company> {
-//   @PrimaryKey
-//   @AutoIncrement
-//   @Column
-//   id: number;
+@Entity()
+export class Company extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-//   @Column
-//   name: string;
-// }
+  @Column()
+  name: string;
 
-// export default Company;
+  @OneToMany(() => User, (user) => user.company)
+  employers: User[];
+
+  @CreateDateColumn({ type: "timestamp" })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: "timestamp" })
+  updatedAt: Date;
+}
