@@ -26,9 +26,9 @@ A boilerplate with all you need to create a typescript project.
 
 After install modules you should config some files:
 
-> **ormconfig.json:** Here you need to put every database config.
+> **ormconfig.json:** Put here every database config.
 
-Then make a copy of ".env-example" as ".env" e fill the environment variables.
+Then make a copy of ".env-example" as ".env" and fill the environment variables.
 
 ## TODO :heavy_check_mark:
 
