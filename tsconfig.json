@@ -15,7 +15,9 @@
       "@config/*": ["src/config/*"],
       "@interfaces/*": ["src/interfaces/*"],
       "@models/*": ["src/database/entities/*"],
-      "@controllers/*": ["src/controllers/*"]
+      "@controllers/*": ["src/controllers/*"],
+      "@middlewares/*": ["src/middlewares/*"],
+      "@constants/*": ["src/constants/*"]
     }
   },
   "include": ["src/**/*"]

@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { createConnection } from "typeorm";
 import { User } from "@models/User";
 import { Company } from "@models/Company";
@@ -25,7 +25,7 @@ export default {
         relations: ["company", "role"],
       });
       user
-        ? res.send(user)
+        ? res.json(user)
         : res.status(400).send("Cant get the specific user!");
     } catch (error) {
       res.status(400).send("Cant get the specific user!");
@@ -33,7 +33,7 @@ export default {
       connection.close();
     }
   },
-  async create(req: Request, res: Response) {
+  async create(req: Request, res: Response, next: NextFunction) {
     const connection = await createConnection();
 
     try {
@@ -48,9 +48,9 @@ export default {
         company,
         role,
       }).save();
-      res.status(201).send(user);
+      return res.status(201).send(user);
     } catch (error) {
-      res.send(400).send("Invalid parameters!");
+      next(error);
     } finally {
       connection.close();
     }
@@ -70,9 +70,9 @@ export default {
       const user = await User.findOneOrFail(user_id as any, {
         relations: ["company", "role"],
       });
-      res.status(200).send(user);
+      return res.status(200).send(user);
     } catch (error) {
-      res.status(400).send("Error trying to update user!");
+      return res.status(400).send("Error trying to update user!");
     } finally {
       connection.close();
     }

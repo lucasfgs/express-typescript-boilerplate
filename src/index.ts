@@ -8,6 +8,7 @@ import swaggerUi from "swagger-ui-express";
 import apiDocumentation from "./docs/api";
 
 import routes from "./routes/api";
+import { errorHandler } from "./middlewares/errorHandler";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -15,6 +16,7 @@ const port = process.env.PORT || 3000;
 app.use(morgan("dev"));
 app.use(helmet());
 app.use(express.json());
+app.use(errorHandler);
 app.use("/api", routes);
 
 // API documentation route

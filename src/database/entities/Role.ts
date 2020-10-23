@@ -6,8 +6,6 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  OneToMany,
-  Unique,
 } from "typeorm";
 import { User } from "./User";
 

@@ -27,21 +27,63 @@ export default {
   ],
   security: [
     {
-      ApiKeyAuth: [],
+      bearerAuth: [],
     },
   ],
   tags: [
     {
-      name: "Users",
+      name: "Authentication",
     },
     {
-      name: "Companies",
+      name: "Users",
     },
     {
       name: "Roles",
     },
+    {
+      name: "Companies",
+    },
   ],
   paths: {
+    "/auth": {
+      post: {
+        tags: ["Authentication"],
+        summary: "User authentication.",
+        operationId: "authenticateUser",
+        requestBody: {
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/Auth",
+              },
+            },
+          },
+          required: true,
+        },
+        responses: {
+          200: {
+            description: "Success",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/User",
+                },
+              },
+            },
+          },
+          400: {
+            description: "Email or password incorrect",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Error",
+                },
+              },
+            },
+          },
+        },
+      },
+    },
     "/users/{id}": {
       get: {
         tags: ["Users"],
@@ -602,6 +644,19 @@ export default {
   },
   components: {
     schemas: {
+      Auth: {
+        type: "object",
+        properties: {
+          email: {
+            type: "string",
+            example: "test@test.com",
+          },
+          password: {
+            type: "string",
+            example: "123",
+          },
+        },
+      },
       User: {
         type: "object",
         properties: {
@@ -691,11 +746,7 @@ export default {
       },
     },
     securitySchemes: {
-      ApiKeyAuth: {
-        type: "apiKey",
-        in: "header",
-        name: "x-api-key",
-      },
+      bearerAuth: { type: "http", scheme: "bearer", bearerFormat: "JWT" },
     },
   },
 };
