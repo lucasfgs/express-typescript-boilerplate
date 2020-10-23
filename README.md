@@ -32,7 +32,6 @@ Then make a copy of ".env-example" as ".env" and fill the environment variables.
 
 ## TODO :heavy_check_mark:
 
-- Authentication routes/middleware
 - Tests
 
 ---
