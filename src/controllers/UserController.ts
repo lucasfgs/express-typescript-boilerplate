@@ -1,13 +1,14 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { createConnection } from "typeorm";
 import { User } from "@models/User";
 import { Company } from "@models/Company";
+import { Role } from "@models/Role";
 
 export default {
   async index(req: Request, res: Response) {
     const connection = await createConnection();
     try {
-      const users = await User.find({ relations: ["company"] });
+      const users = await User.find({ relations: ["company", "role"] });
       res.send(users);
     } catch (error) {
       res.status(400).send("Cant get all users!");
@@ -20,9 +21,11 @@ export default {
 
     const { user_id } = req.params;
     try {
-      const user = await User.findOneOrFail(user_id);
+      const user = await User.findOneOrFail(user_id, {
+        relations: ["company", "role"],
+      });
       user
-        ? res.send(user)
+        ? res.json(user)
         : res.status(400).send("Cant get the specific user!");
     } catch (error) {
       res.status(400).send("Cant get the specific user!");
@@ -30,41 +33,46 @@ export default {
       connection.close();
     }
   },
-  async create(req: Request, res: Response) {
+  async create(req: Request, res: Response, next: NextFunction) {
     const connection = await createConnection();
 
     try {
-      const { name, email, password, companyId } = req.body;
+      const { name, email, password, companyId, roleId } = req.body;
 
       const company = await Company.findOneOrFail({ where: { id: companyId } });
+      const role = await Role.findOneOrFail({ where: { id: roleId } });
       const user = await User.create({
         name,
         email,
         password,
         company,
+        role,
       }).save();
-      res.status(201).send(user);
+      return res.status(201).send(user);
     } catch (error) {
-      res.send(400).send("Invalid parameters!");
+      next(error);
     } finally {
       connection.close();
     }
   },
   async update(req: Request, res: Response) {
     const connection = await createConnection();
-    const { name, email, password, companyId } = req.body;
+    const { name, email, password, companyId, roleId } = req.body;
     const { user_id } = req.headers;
     try {
       const company = await Company.findOneOrFail({
         where: { id: companyId },
       });
-      await User.update(user_id, { name, email, password, company });
-      const user = await User.findOneOrFail(user_id as any, {
-        relations: ["company"],
+      const role = await Role.findOneOrFail({
+        where: { id: roleId },
       });
-      res.status(200).send(user);
+      await User.update(user_id, { name, email, password, company, role });
+      const user = await User.findOneOrFail(user_id as any, {
+        relations: ["company", "role"],
+      });
+      return res.status(200).send(user);
     } catch (error) {
-      res.status(400).send("Error trying to update user!");
+      return res.status(400).send("Error trying to update user!");
     } finally {
       connection.close();
     }
