@@ -13,7 +13,7 @@ export default {
   },
   servers: [
     {
-      url: `http://localhost:8000/${api.name}/${api.version}`,
+      url: `http://localhost:${process.env.PORT}/${api.name}/${api.version}`,
       description: "Local server",
     },
     {

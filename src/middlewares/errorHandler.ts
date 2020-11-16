@@ -17,5 +17,5 @@ export function errorHandler(
   }
 
   // default to 500 server error
-  return res.status(500).json({ message: err.message });
+  return res.status(500).json({ message: err });
 }

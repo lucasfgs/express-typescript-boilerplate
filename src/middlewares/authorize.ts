@@ -2,7 +2,7 @@ import { Response, NextFunction, RequestHandler } from "express";
 import jwt from "express-jwt";
 
 export function authorize(
-  roles: any = []
+  roles: string | string[]
 ): [jwt.RequestHandler, RequestHandler] {
   // roles param can be a single role string (e.g. Role.User or 'User')
   // or an array of roles (e.g. [Role.Admin, Role.User] or ['Admin', 'User'])
