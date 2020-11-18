@@ -1,21 +1,21 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { createConnection } from "typeorm";
 import { Company } from "@models/Company";
 
 export default {
-  async index(req: Request, res: Response) {
+  async index(req: Request, res: Response, next: NextFunction) {
     const connection = await createConnection();
     try {
       const companies = await Company.find({ relations: ["employers"] });
       res.send(companies);
     } catch (error) {
-      res.status(400).send(error);
-      // res.status(400).send("Cant get all companies!");
+      next(error);
+      // next("Cant get all companies!");
     } finally {
       connection.close();
     }
   },
-  async show(req: Request, res: Response) {
+  async show(req: Request, res: Response, next: NextFunction) {
     const connection = await createConnection();
 
     const { company_id } = req.params;
@@ -23,11 +23,9 @@ export default {
       const company = await Company.findOneOrFail(company_id, {
         relations: ["employers"],
       });
-      company
-        ? res.send(company)
-        : res.status(400).send("Cant get the specific company!");
+      company ? res.send(company) : next("Cant get the specific company!");
     } catch (error) {
-      res.status(400).send("Cant get the specific company!");
+      next("Cant get the specific company!");
     } finally {
       connection.close();
     }
@@ -37,32 +35,34 @@ export default {
 
     try {
       const { name } = req.body;
-      const UserRepository = connection.getRepository(Company);
-      const company = await UserRepository.create({ name }).save();
-      res.status(201).send(company);
+      const company = await Company.create({ name }).save();
+      res.status(201).json(company);
     } catch (error) {
-      res.send(400).send("Invalid parameters!");
+      res.status(400).json(error);
     } finally {
       connection.close();
     }
   },
-  async update(req: Request, res: Response) {
+  async update(req: Request, res: Response, next: NextFunction) {
     const connection = await createConnection();
-    const { name } = req.body;
-    const { company_id } = req.headers;
     try {
-      await Company.update(company_id, { name });
-      const company = await Company.findOneOrFail(company_id as any, {
-        relations: ["employers"],
-      });
-      res.status(200).send(company);
+      const { name } = req.body;
+      const { company_id } = req.headers;
+
+      const company = await Company.findOneOrFail(+company_id);
+
+      company.name = name;
+
+      const updatedCompany = await company.save();
+
+      res.status(200).json(updatedCompany);
     } catch (error) {
-      res.status(400).send("Error trying to update company!");
+      next(error);
     } finally {
       connection.close();
     }
   },
-  async destroy(req: Request, res: Response) {
+  async destroy(req: Request, res: Response, next: NextFunction) {
     const connection = await createConnection();
 
     try {
@@ -71,10 +71,10 @@ export default {
       if (company.affected) {
         res.status(200).send("Company were deleted!");
       } else {
-        res.status(400).send("Error trying to deleted company!");
+        next("Error trying to deleted company!");
       }
     } catch (error) {
-      res.status(400).send("Error trying to deleted company!");
+      next("Error trying to deleted company!");
     } finally {
       connection.close();
     }

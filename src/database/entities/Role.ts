@@ -6,7 +6,11 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  BeforeInsert,
+  BeforeUpdate,
 } from "typeorm";
+import { IsNotEmpty, validateOrReject } from "class-validator";
+
 import { User } from "./User";
 
 @Entity()
@@ -15,6 +19,7 @@ export class Role extends BaseEntity {
   id: number;
 
   @Column({ unique: true, nullable: false })
+  @IsNotEmpty({ message: "Name is required" })
   name: string;
 
   @ManyToOne(() => User, (user) => user.role)
@@ -25,4 +30,10 @@ export class Role extends BaseEntity {
 
   @UpdateDateColumn({ type: "timestamp" })
   updatedAt: Date;
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  private validate(): Promise<void> {
+    return validateOrReject(this);
+  }
 }

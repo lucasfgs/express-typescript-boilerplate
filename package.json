@@ -3,14 +3,15 @@
   "version": "1.0.0",
   "main": "src/index.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc --project tsconfig.json && tscpaths -p tsconfig.json -s ./src -o ./dist",
     "prestart": "npm run build",
-    "start": "node .",
+    "start": "node -r tsconfig-paths/register -r ts-node ./dist/src/index.js",
     "dev": "ts-node-dev -r tsconfig-paths/register src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "license": "MIT",
   "dependencies": {
+    "class-validator": "^0.12.2",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-jwt": "^6.0.0",
@@ -22,6 +23,7 @@
     "reflect-metadata": "^0.1.13",
     "swagger-jsdoc": "^4.2.0",
     "swagger-ui-express": "^4.1.4",
+    "tscpaths": "^0.0.9",
     "typeorm": "^0.2.28"
   },
   "devDependencies": {
@@ -43,5 +45,14 @@
   "resolutions": {
     "**/cli-highlight": "2.1.4",
     "**/chalk": "3.0.0"
+  },
+  "_moduleAliases": {
+    "@root": ".",
+    "@config": "src/config",
+    "@interfaces/*": "src/interfaces",
+    "@models/*": "src/database/entities",
+    "@controllers/*": "src/controllers",
+    "@middlewares/*": "src/middlewares",
+    "@constants/*": "src/constants"
   }
 }

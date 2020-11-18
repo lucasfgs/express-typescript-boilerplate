@@ -1,3 +1,4 @@
+import { IsEmail, MinLength, validateOrReject } from "class-validator";
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -7,6 +8,8 @@ import {
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
+  BeforeInsert,
+  BeforeUpdate,
 } from "typeorm";
 import { Company } from "./Company";
 import { Role } from "./Role";
@@ -17,12 +20,15 @@ export class User extends BaseEntity {
   id: number;
 
   @Column()
+  @MinLength(3, { message: "Name is too short" })
   name: string;
 
   @Column({ unique: true, nullable: false })
+  @IsEmail({ allow_display_name: true }, { message: "Email is invalid" })
   email: string;
 
   @Column()
+  @MinLength(6, { message: "Password is too short" })
   password: string;
 
   @ManyToOne(() => Company, (company) => company.employers)
@@ -36,4 +42,10 @@ export class User extends BaseEntity {
 
   @UpdateDateColumn({ type: "timestamp" })
   updatedAt: Date;
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  private validate(): Promise<void> {
+    return validateOrReject(this);
+  }
 }

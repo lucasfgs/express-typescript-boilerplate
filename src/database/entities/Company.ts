@@ -3,13 +3,13 @@ import {
   PrimaryGeneratedColumn,
   Column,
   BaseEntity,
-  OneToOne,
-  ManyToMany,
-  ManyToOne,
   OneToMany,
   CreateDateColumn,
   UpdateDateColumn,
+  BeforeInsert,
+  BeforeUpdate,
 } from "typeorm";
+import { MinLength, validateOrReject } from "class-validator";
 import { User } from "./User";
 
 @Entity()
@@ -18,6 +18,7 @@ export class Company extends BaseEntity {
   id: number;
 
   @Column()
+  @MinLength(3, { message: "Company name is too short" })
   name: string;
 
   @OneToMany(() => User, (user) => user.company)
@@ -28,4 +29,10 @@ export class Company extends BaseEntity {
 
   @UpdateDateColumn({ type: "timestamp" })
   updatedAt: Date;
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  private validate(): Promise<void> {
+    return validateOrReject(this);
+  }
 }

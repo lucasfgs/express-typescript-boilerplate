@@ -37,11 +37,10 @@ export default {
 
     try {
       const { name } = req.body;
-      const UserRepository = connection.getRepository(Role);
-      const role = await UserRepository.create({ name }).save();
-      res.status(201).send(role);
+      const role = await Role.create({ name }).save();
+      res.status(201).json(role);
     } catch (error) {
-      res.send(400).send("Invalid parameters!");
+      res.status(400).json(error);
     } finally {
       connection.close();
     }
@@ -51,13 +50,15 @@ export default {
     const { name } = req.body;
     const { role_id } = req.headers;
     try {
-      await Role.update(role_id, { name });
-      const role = await Role.findOneOrFail(role_id as any, {
-        relations: ["users"],
-      });
-      res.status(200).send(role);
+      const role = await Role.findOneOrFail(+role_id);
+
+      role.name = name;
+
+      const updatedRole = await role.save();
+
+      res.status(200).send(updatedRole);
     } catch (error) {
-      res.status(400).send("Error trying to update role!");
+      res.status(400).send(error);
     } finally {
       connection.close();
     }

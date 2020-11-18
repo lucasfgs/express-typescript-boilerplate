@@ -15,7 +15,7 @@ routes.get(
 
 routes.post("/", UserController.create);
 
-routes.patch("/", authorize(Role.user), UserController.update);
+routes.patch("/", authorize([Role.user, Role.admin]), UserController.update);
 
 routes.delete("/", authorize(Role.admin), UserController.destroy);
 
