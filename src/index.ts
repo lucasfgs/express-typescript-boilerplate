@@ -5,6 +5,7 @@ import express from "express";
 import morgan from "morgan";
 import helmet from "helmet";
 import swaggerUi from "swagger-ui-express";
+import cors from "cors";
 import apiDocumentation from "./docs/api";
 
 import routes from "./routes/api";
@@ -15,6 +16,7 @@ const port = process.env.PORT || 3000;
 
 app.use(morgan("dev"));
 app.use(helmet());
+app.use(cors());
 app.use(express.json());
 app.use(errorHandler);
 app.use("/api", routes);
