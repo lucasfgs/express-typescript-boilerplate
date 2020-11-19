@@ -8,6 +8,7 @@ import {
   ManyToOne,
   BeforeInsert,
   BeforeUpdate,
+  OneToMany,
 } from "typeorm";
 import { IsNotEmpty, validateOrReject } from "class-validator";
 
@@ -22,7 +23,7 @@ export class Role extends BaseEntity {
   @IsNotEmpty({ message: "Name is required" })
   name: string;
 
-  @ManyToOne(() => User, (user) => user.role)
+  @OneToMany(() => User, (user) => user.role)
   users: User[];
 
   @CreateDateColumn({ type: "timestamp" })
