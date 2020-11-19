@@ -26,7 +26,7 @@ export default {
         next("Email or password incorrect!");
       }
     } catch (error) {
-      res.status(400).json(error);
+      res.status(400).json({ message: "Email or password incorrect!" });
     } finally {
       connection.close();
     }
