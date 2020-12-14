@@ -36,4 +36,4 @@ Then make a copy of ".env-example" as ".env" and fill the environment variables.
 
 ---
 
-Make with :heart: by [Lucas Ferreira](https://github.com/lucasfgs)
+Made with :heart: by [Lucas Ferreira](https://github.com/lucasfgs)
