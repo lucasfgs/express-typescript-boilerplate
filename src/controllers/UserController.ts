@@ -1,45 +1,49 @@
 import { NextFunction, Request, Response } from "express";
-import { createConnection } from "typeorm";
+import { getRepository } from "typeorm";
 import { User } from "@models/User";
 import { Company } from "@models/Company";
 import { Role } from "@models/Role";
 
 export default {
   async index(req: Request, res: Response, next: NextFunction) {
-    const connection = await createConnection();
+    const UserRepository = await getRepository(User);
     try {
-      const users = await User.find({ relations: ["company", "role"] });
+      const users = await UserRepository.find({
+        relations: ["company", "role"],
+      });
       res.send(users);
     } catch (error) {
       next("Cant get all users!");
-    } finally {
-      connection.close();
     }
   },
   async show(req: Request, res: Response, next: NextFunction) {
-    const connection = await createConnection();
+    const UserRepository = await getRepository(User);
 
     const { user_id } = req.params;
     try {
-      const user = await User.findOneOrFail(user_id, {
+      const user = await UserRepository.findOneOrFail(user_id, {
         relations: ["company", "role"],
       });
       user ? res.json(user) : next("Cant get the specific user!");
     } catch (error) {
       next("Cant get the specific user!");
-    } finally {
-      connection.close();
     }
   },
   async create(req: Request, res: Response, next: NextFunction) {
-    const connection = await createConnection();
+    const CompanyRepository = await getRepository(Company);
+    const RoleRepository = await getRepository(Role);
+    const UserRepository = await getRepository(User);
 
     try {
       const { name, email, password, companyId, roleId } = req.body;
 
-      const company = await Company.findOneOrFail({ where: { id: companyId } });
-      const role = await Role.findOneOrFail({ where: { id: roleId } });
-      const user = await User.create({
+      const company = await CompanyRepository.findOneOrFail({
+        where: { id: companyId },
+      });
+      const role = await RoleRepository.findOneOrFail({
+        where: { id: roleId },
+      });
+      const user = await UserRepository.create({
         name,
         email,
         password,
@@ -52,12 +56,11 @@ export default {
       // next(error);
 
       return res.status(400).json(error);
-    } finally {
-      connection.close();
     }
   },
   async update(req: Request, res: Response, next: NextFunction) {
-    const connection = await createConnection();
+    const UserRepository = await getRepository(User);
+
     const { name, email, password, companyId, roleId } = req.body;
     const { user_id } = req.headers;
     try {
@@ -67,7 +70,7 @@ export default {
       // const role = await Role.findOneOrFail({
       //   where: { id: roleId },
       // });
-      const user = await User.findOneOrFail(+user_id, {
+      const user = await UserRepository.findOneOrFail(+user_id, {
         relations: ["company", "role"],
       });
 
@@ -84,16 +87,14 @@ export default {
       return res.status(200).send(updateduser);
     } catch (error) {
       return res.status(400).json(error);
-    } finally {
-      connection.close();
     }
   },
   async destroy(req: Request, res: Response, next: NextFunction) {
-    const connection = await createConnection();
+    const UserRepository = await getRepository(User);
 
     try {
       const { user_id } = req.headers;
-      const user = await User.delete(user_id);
+      const user = await UserRepository.delete(user_id);
       if (user.affected) {
         res.status(200).send("User were deleted!");
       } else {
@@ -101,8 +102,6 @@ export default {
       }
     } catch (error) {
       next("Error trying to deleted user!");
-    } finally {
-      connection.close();
     }
   },
 };

@@ -25,10 +25,10 @@ export class Company extends BaseEntity {
   employers: User[];
 
   @CreateDateColumn({ type: "timestamp" })
-  createdAt: Date;
+  created_at: Date;
 
   @UpdateDateColumn({ type: "timestamp" })
-  updatedAt: Date;
+  updated_at: Date;
 
   @BeforeInsert()
   @BeforeUpdate()

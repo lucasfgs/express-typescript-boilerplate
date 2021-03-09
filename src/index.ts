@@ -8,6 +8,8 @@ import swaggerUi from "swagger-ui-express";
 import cors from "cors";
 import apiDocumentation from "./docs/api";
 
+import "./database";
+
 import routes from "./routes/api";
 import { errorHandler } from "./middlewares/errorHandler";
 
@@ -25,7 +27,6 @@ app.use("/api", routes);
 if (process.env.ENV_MODE === "DEV")
   app.use("/docs", swaggerUi.serve, swaggerUi.setup(apiDocumentation));
 
-// WHEN BUILDING COMMENT THIS BLOCK
 app.listen(port, () =>
   console.log(`✔ Server listening at: ${process.env.HOST}:${port}`)
 );
