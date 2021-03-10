@@ -3,7 +3,9 @@
     "module": "commonjs",
     "esModuleInterop": true,
     "target": "ES2017",
-    "lib": ["ES2017"],
+    "lib": [
+      "ES2017"
+    ],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "noImplicitAny": true,
@@ -14,14 +16,33 @@
     "rootDir": "src",
     "resolveJsonModule": true,
     "paths": {
-      "*": ["node_modules/*"],
-      "@config/*": ["src/config/*"],
-      "@interfaces/*": ["src/interfaces/*"],
-      "@models/*": ["src/database/entities/*"],
-      "@controllers/*": ["src/controllers/*"],
-      "@middlewares/*": ["src/middlewares/*"],
-      "@constants/*": ["src/constants/*"]
+      "*": [
+        "node_modules/*"
+      ],
+      "@config/*": [
+        "src/config/*"
+      ],
+      "@interfaces/*": [
+        "src/interfaces/*"
+      ],
+      "@models/*": [
+        "src/database/entities/*"
+      ],
+      "@services/*": [
+        "src/services/*"
+      ],
+      "@controllers/*": [
+        "src/controllers/*"
+      ],
+      "@middlewares/*": [
+        "src/middlewares/*"
+      ],
+      "@constants/*": [
+        "src/constants/*"
+      ]
     }
   },
-  "include": ["src/**/*"]
+  "include": [
+    "src/**/*"
+  ]
 }

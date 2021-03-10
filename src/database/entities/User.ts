@@ -14,8 +14,17 @@ import {
 import { Company } from "./Company";
 import { Role } from "./Role";
 
+export interface IUser {
+  id: number;
+  name: string;
+  email: string;
+  password?: string;
+  company?: Company;
+  role?: Role;
+}
+
 @Entity()
-export class User extends BaseEntity {
+export class User extends BaseEntity implements IUser {
   @PrimaryGeneratedColumn()
   id: number;
 

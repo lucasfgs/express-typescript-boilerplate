@@ -1,11 +1,22 @@
 import { NextFunction, Request, Response } from "express";
 import { getRepository } from "typeorm";
 import { User } from "@models/User";
-import { Company } from "@models/Company";
-import { Role } from "@models/Role";
+import { UserServices } from "@services/UserServices";
+import { Route } from "@tsoa/runtime";
+import { Post } from "@tsoa/runtime";
+import { Body } from "@tsoa/runtime";
 
-export default {
-  async index(req: Request, res: Response, next: NextFunction) {
+export interface UserBodyParams {
+  name: string;
+  email: string;
+  password: string;
+  companyId: number;
+  roleId: number;
+}
+
+@Route("users")
+export class UserController {
+  public async index(req: Request, res: Response, next: NextFunction) {
     const UserRepository = await getRepository(User);
     try {
       const users = await UserRepository.find({
@@ -15,8 +26,8 @@ export default {
     } catch (error) {
       next("Cant get all users!");
     }
-  },
-  async show(req: Request, res: Response, next: NextFunction) {
+  }
+  public async show(req: Request, res: Response, next: NextFunction) {
     const UserRepository = await getRepository(User);
 
     const { user_id } = req.params;
@@ -28,37 +39,15 @@ export default {
     } catch (error) {
       next("Cant get the specific user!");
     }
-  },
-  async create(req: Request, res: Response, next: NextFunction) {
-    const CompanyRepository = await getRepository(Company);
-    const RoleRepository = await getRepository(Role);
-    const UserRepository = await getRepository(User);
-
-    try {
-      const { name, email, password, companyId, roleId } = req.body;
-
-      const company = await CompanyRepository.findOneOrFail({
-        where: { id: companyId },
-      });
-      const role = await RoleRepository.findOneOrFail({
-        where: { id: roleId },
-      });
-      const user = await UserRepository.create({
-        name,
-        email,
-        password,
-        company,
-        role,
-      }).save();
-      return res.status(201).send(user);
-    } catch (error) {
-      // Fix: error handling not working here
-      // next(error);
-
-      return res.status(400).json(error);
-    }
-  },
-  async update(req: Request, res: Response, next: NextFunction) {
+  }
+  @Post()
+  public async create(
+    @Body()
+    params: UserBodyParams
+  ): Promise<User> {
+    return new UserServices().create(params);
+  }
+  public async update(req: Request, res: Response, next: NextFunction) {
     const UserRepository = await getRepository(User);
 
     const { name, email, password, companyId, roleId } = req.body;
@@ -88,8 +77,8 @@ export default {
     } catch (error) {
       return res.status(400).json(error);
     }
-  },
-  async destroy(req: Request, res: Response, next: NextFunction) {
+  }
+  public async destroy(req: Request, res: Response, next: NextFunction) {
     const UserRepository = await getRepository(User);
 
     try {
@@ -103,5 +92,5 @@ export default {
     } catch (error) {
       next("Error trying to deleted user!");
     }
-  },
-};
+  }
+}
