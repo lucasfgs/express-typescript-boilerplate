@@ -1,5 +1,4 @@
-import { Controller, Post, Route } from "@tsoa/runtime";
-import { Body } from "@tsoa/runtime";
+import { Controller, Post, Route, Body, Tags } from "@tsoa/runtime";
 import { AuthenticationService } from "@services/AuthenticationServices";
 
 export interface AuthenticationParams {
@@ -8,7 +7,8 @@ export interface AuthenticationParams {
 }
 
 @Route("auth")
-class AuthenticationController extends Controller {
+@Tags("Authentication")
+export class AuthenticationController extends Controller {
   @Post()
   public authenticate(
     @Body()
@@ -17,5 +17,3 @@ class AuthenticationController extends Controller {
     return new AuthenticationService().execute(params);
   }
 }
-
-export default AuthenticationController;

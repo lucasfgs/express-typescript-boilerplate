@@ -6,7 +6,6 @@ import morgan from "morgan";
 import helmet from "helmet";
 import swaggerUi from "swagger-ui-express";
 import cors from "cors";
-import apiDocumentation from "./docs/api";
 
 import "./database";
 
@@ -25,16 +24,16 @@ app.use(express.static("public"));
 app.use("/api", routes);
 
 // API documentation route
-if (process.env.ENV_MODE === "DEV")
-  app.use(
-    "/docs",
-    swaggerUi.serve,
-    swaggerUi.setup(undefined, {
-      swaggerOptions: {
-        url: "/swagger.json",
-      },
-    })
-  );
+// if (process.env.ENV_MODE === "DEV")
+app.use(
+  "/docs",
+  swaggerUi.serve,
+  swaggerUi.setup(undefined, {
+    swaggerOptions: {
+      url: "/swagger.json",
+    },
+  })
+);
 
 app.listen(port, () =>
   console.log(`✔ Server listening at: ${process.env.HOST}:${port}`)
